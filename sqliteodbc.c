@@ -2,9 +2,9 @@
  * @file sqliteodbc.c
  * SQLite ODBC Driver main module.
  *
- * $Id: sqliteodbc.c,v 1.225 2020/06/20 11:56:09 chw Exp chw $
+ * $Id: sqliteodbc.c,v 1.227 2023/10/23 13:33:58 chw Exp chw $
  *
- * Copyright (c) 2001-2020 Christian Werner <chw@ch-werner.de>
+ * Copyright (c) 2001-2023 Christian Werner <chw@ch-werner.de>
  * OS/2 Port Copyright (c) 2004 Lorne R. Sunley <lsunley@mb.sympatico.ca>
  *
  * See the file "license.terms" for information on usage
@@ -1461,40 +1461,40 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
     int m = 0, d = 0;
 
     switch (sqltype) {
-    case SQL_INTEGER:      m = 10; d = 9; break;
-    case SQL_TINYINT:      m = 4; d = 3; break;
-    case SQL_SMALLINT:     m = 6; d = 5; break;
-    case SQL_FLOAT:        m = 25; d = 24; break;
-    case SQL_DOUBLE:       m = 54; d = 53; break;
-    case SQL_VARCHAR:      m = 255; d = 0; break;
+    case SQL_INTEGER:       m = 10; d = 9; break;
+    case SQL_TINYINT:       m = 4; d = 3; break;
+    case SQL_SMALLINT:      m = 6; d = 5; break;
+    case SQL_FLOAT:	    m = 25; d = 24; break;
+    case SQL_DOUBLE:	    m = 54; d = 53; break;
+    case SQL_VARCHAR:       m = 255; d = 0; break;
 #ifdef WINTERFACE
 #ifdef SQL_WVARCHAR
-    case SQL_WVARCHAR:     m = 255; d = 0; break;
+    case SQL_WVARCHAR:      m = 255; d = 0; break;
 #endif
 #endif
 #ifdef SQL_TYPE_DATE
     case SQL_TYPE_DATE:
 #endif
-    case SQL_DATE:         m = 10; d = 0; break;
+    case SQL_DATE:	    m = 10; d = 0; break;
 #ifdef SQL_TYPE_TIME
     case SQL_TYPE_TIME:
 #endif
-    case SQL_TIME:         m = 8; d = 0; break;
+    case SQL_TIME:	    m = 8; d = 0; break;
 #ifdef SQL_TYPE_TIMESTAMP
     case SQL_TYPE_TIMESTAMP:
 #endif
-    case SQL_TIMESTAMP:    m = 32; d = 3; break;
+    case SQL_TIMESTAMP:     m = 32; d = 3; break;
 #ifdef SQL_LONGVARCHAR
-    case SQL_LONGVARCHAR : m = 65536; d = 0; break;
+    case SQL_LONGVARCHAR :  m = 65536; d = 0; break;
 #endif
 #ifdef WINTERFACE
 #ifdef SQL_WLONGVARCHAR
-    case SQL_WLONGVARCHAR: m = 65536; d = 0; break;
+    case SQL_WLONGVARCHAR:  m = 65536; d = 0; break;
 #endif
 #endif
 #if (HAVE_ENCDEC)
     case SQL_BINARY:
-    case SQL_VARBINARY: m = 255; d = 0; break;
+    case SQL_VARBINARY:	    m = 255; d = 0; break;
     case SQL_LONGVARBINARY: m = 65536; d = 0; break;
 #endif
 #ifdef SQL_BIT
@@ -1724,6 +1724,18 @@ errout:
 		}
 	    }
 	    *p++ = *q;
+	    break;
+	case '-':
+	    *p++ = *q;
+	    if (!inq && q[1] == '-') {
+		++q;
+		while (*q) {
+		    *p++ = *q++;
+		    if (*q == '\n') {
+			break;
+		    }
+		}
+	    }
 	    break;
 	case '?':
 	    if (inq) {
@@ -15186,16 +15198,16 @@ done:
 
 #endif
 
-#define MAXPATHLEN      (259+1)           /* Max path length */
-#define MAXKEYLEN       (15+1)            /* Max keyword length */
-#define MAXDESC         (255+1)           /* Max description length */
-#define MAXDSNAME       (255+1)           /* Max data source name length */
-#define MAXTONAME       (32+1)            /* Max timeout length */
+#define MAXPATHLEN      (259+1)		/* Max path length */
+#define MAXKEYLEN       (15+1)		/* Max keyword length */
+#define MAXDESC		(255+1)		/* Max description length */
+#define MAXDSNAME       (255+1)		/* Max data source name length */
+#define MAXTONAME       (32+1)		/* Max timeout length */
 #define MAXDBNAME       MAXPATHLEN
 
 /* Attribute key indexes into an array of Attr structs, see below */
 
-#define KEY_DSN 		0
+#define KEY_DSN			0
 #define KEY_DESC		1
 #define KEY_DBNAME		2
 #define KEY_BUSY		3

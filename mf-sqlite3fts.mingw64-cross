@@ -277,7 +277,7 @@ fts3.o:	$(TOP)/ext/fts3/fts3.c $(FTS3HDR) $(HDR)
 fts3_hash.o:	$(TOP)/ext/fts3/fts3_hash.c $(FTS3HDR) $(HDR)
 	$(TCCX) -c $(TOP)/ext/fts3/fts3_hash.c
 
-fts3_porter.o:	$(TOP)/ext/fts2/fts2_porter.c $(FTS3HDR) $(HDR)
+fts3_porter.o:	$(TOP)/ext/fts3/fts3_porter.c $(FTS3HDR) $(HDR)
 	$(TCCX) -c $(TOP)/ext/fts3/fts3_porter.c
 
 fts3_tokenizer.o:	$(TOP)/ext/fts3/fts3_tokenizer.c $(FTS3HDR) $(HDR)

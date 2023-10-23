@@ -2,7 +2,7 @@
 #
 # Build script for cross compiling and packaging SQLite
 # ODBC drivers and tools for Win32 using MinGW and NSIS.
-# Tested on Fedora Core 3/5/8, Debian Etch, RHEL 5/6
+# Tested on Fedora Core 3/5/8, Debian Etch, RHEL 5/6.
 #
 # Cross toolchain and NSIS for Linux/i386/x86_64 can be fetched from
 #  http://www.ch-werner.de/xtools/crossmingw64-0.3-1.i386.rpm
@@ -25,8 +25,8 @@
 set -e
 
 VER2=2.8.17
-VER3=3.32.3
-VER3X=3320300
+VER3=3.43.2
+VER3X=3430200
 VERZ=1.2.8
 TCCVER=0.9.26
 
@@ -272,7 +272,7 @@ echo "====================="
 echo "Preparing sqlite3 ..."
 echo "====================="
 test -r sqlite-src-${VER3X}.zip || \
-    wget -c http://www.sqlite.org/2020/sqlite-src-${VER3X}.zip \
+    wget -c http://www.sqlite.org/2023/sqlite-src-${VER3X}.zip \
       --no-check-certificate
 test -r sqlite-src-${VER3X}.zip || exit 1
 test -r extension-functions.c ||
@@ -318,7 +318,8 @@ test -r sqlite3/tool/mkshellc.tcl && \
   sed -i -e 's/ rb/ r/g' sqlite3/tool/mkshellc.tcl
 
 # appendText name clash in sqlite3 shell
-test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" \
+  -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && perl -pi -e 's/appendText/shAppendText/g' sqlite3/src/shell.c.in
 
 test -r sqlite3/src/shell.c.in &&
@@ -416,6 +417,7 @@ test "$VER3" != "3.7.14" -a "$VER3" != "3.7.14.1" -a "$VER3" != "3.7.15" \
   -a "$VER3" != "3.14.0" -a "$VER3" != "3.14.1" -a "$VER3" != "3.15.0" \
   -a "$VER3" != "3.15.1" -a "$VER3" != "3.15.2" -a "$VER3" != "3.19.3" \
   -a "$VER3" != "3.22.0" -a "$VER3" != "3.32.2" -a "$VER3" != "3.32.3" \
+  -a "$VER3" != "3.42.0" -a "$VER3" != "3.43.0" -a "$VER3" != "3.43.2" \
   && patch sqlite3/src/libshell.c <<'EOD'
 --- sqlite3.orig/src/libshell.c  2007-01-08 23:40:05.000000000 +0100
 +++ sqlite3/src/libshell.c  2007-01-10 18:35:43.000000000 +0100
@@ -599,6 +601,7 @@ test "$VER3" = "3.8.9" -o "$VER3" = "3.8.10" -o "$VER3" = "3.8.11" \
 EOD
 
 test "$VER3" = "3.22.0" -o "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+  -o "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && patch sqlite3/src/os_win.h <<'EOD'
 --- sqlite3.orig/src/os_win.h       2018-01-22 19:57:25.000000000 +0100
 +++ sqlite3/src/os_win.h    2018-02-21 21:13:46.000000000 +0100
@@ -678,9 +681,25 @@ test "$VER3" = "3.13.0" -o "$VER3" = "3.14.0" -o "$VER3" = "3.14.1" \
      warnInmemoryDb = argc==1;
 EOD
 
+test "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
+  && rm -f sqlite3/src/libshell.c && patch sqlite3/src/libshell.c <<'EOD'
+--- /dev/null	2023-08-23 14:06:59.000000000 +0200
++++ sqlite3/src/libshell.c	2023-08-23 14:06:59.00000000 +0200
+@@ -0,0 +1,7 @@
++#include <stdio.h>
++ 
++int sqlite3_main(int argc, char **argv)
++{
++  fprintf(stderr, "not supported anymore\n");
++  return 1;
++}
+EOD 
+
 rm -f sqlite3/src/minshell.c
 touch sqlite3/src/minshell.c
-patch sqlite3/src/minshell.c <<'EOD'
+
+test "$VER3" != "3.42.0" -a "$VER3" != "3.43.0" -a "$VER3" != "3.43.2" \
+  && patch sqlite3/src/minshell.c <<'EOD'
 --- sqlite3.orig/src/minshell.c  2007-01-10 18:46:47.000000000 +0100
 +++ sqlite3/src/minshell.c  2007-01-10 18:46:47.000000000 +0100
 @@ -0,0 +1,20 @@
@@ -704,6 +723,48 @@ patch sqlite3/src/minshell.c <<'EOD'
 +int main(int argc, char **argv){
 +  return sqlite3_main(argc, argv);
 +}
+EOD
+
+test "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
+  && cp -p sqlite3/src/shell.c sqlite3/src/minshell.c \
+  && patch -d sqlite3 -p1 <<'EOD'
+--- sqlite3.orig/src/minshell.c	2023-08-24 21:58:36.000000000 +0200
++++ sqlite3/src/minshell.c	2023-08-25 16:11:55.290287100 +0200
+@@ -128,6 +129,10 @@
+ #include <ctype.h>
+ #include <stdarg.h>
+ 
++#ifdef _WIN32
++#include <windows.h>
++#endif
++
+ #if !defined(_WIN32) && !defined(WIN32)
+ # include <signal.h>
+ # if !defined(__RTP__) && !defined(_WRS_KERNEL) && !defined(SQLITE_WASI)
+@@ -28154,6 +28158,23 @@
+     }
+   }
+ 
++#if defined(_WIN32) && !defined(__TINYC__)
++  if( data.pAuxDb->zDbFilename==0 ){
++    static OPENFILENAMEW ofn;
++    static WCHAR wDbFn[1024];
++    static char zDbFn[4096];
++    ofn.lStructSize = sizeof(ofn);
++    ofn.lpstrFile = (LPTSTR) wDbFn;
++    ofn.nMaxFile = sizeof(wDbFn);
++    ofn.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_NOCHANGEDIR;
++    if( GetOpenFileNameW(&ofn) ){
++      WideCharToMultiByte(CP_UTF8, 0, wDbFn, -1, zDbFn, sizeof(zDbFn),
++                          NULL, NULL);
++      data.pAuxDb->zDbFilename = zDbFn;
++    }
++  }
++#endif
++
+   if( data.pAuxDb->zDbFilename==0 ){
+ #ifndef SQLITE_OMIT_MEMORYDB
+     data.pAuxDb->zDbFilename = ":memory:";
 EOD
 
 # amalgamation: add libshell.c 
@@ -758,6 +819,7 @@ test "$VER3" != "3.6.15" -a "$VER3" != "3.6.16" -a "$VER3" != "3.6.17" \
   -a "$VER3" != "3.14.0" -a "$VER3" != "3.14.1" -a "$VER3" != "3.15.0" \
   -a "$VER3" != "3.15.1" -a "$VER3" != "3.15.2" -a "$VER3" != "3.19.3" \
   -a "$VER3" != "3.22.0" -a "$VER3" != "3.32.2" -a "$VER3" != "3.32.3" \
+  -a "$VER3" != "3.42.0" -a "$VER3" != "3.43.0" -a "$VER3" != "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 diff -u sqlite3.orig/src/build.c sqlite3/src/build.c
 --- sqlite3.orig/src/build.c	2007-01-09 14:53:04.000000000 +0100
@@ -822,14 +884,15 @@ test "$VER3" != "3.8.8" -a "$VER3" != "3.8.9" -a "$VER3" != "3.8.10" \
   -a "$VER3" != "3.12.2" -a "$VER3" != "3.13.0" -a "$VER3" != "3.14.0" \
   -a "$VER3" != "3.14.1" -a "$VER3" != "3.15.0" -a "$VER3" != "3.15.1" \
   -a "$VER3" != "3.15.2" -a "$VER3" != "3.19.3" -a "$VER3" != "3.22.0" \
-  -a "$VER3" != "3.32.2" -a "$VER3" != "3.32.3" \
+  -a "$VER3" != "3.32.2" -a "$VER3" != "3.32.3" -a "$VER3" != "3.42.0" \
+  -a "$VER3" != "3.43.0" -a "$VER3" != "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 diff -u sqlite3.orig/src/tclsqlite.c sqlite3/src/tclsqlite.c
 --- sqlite3.orig/src/tclsqlite.c	2007-04-06 17:02:14.000000000 +0200
 +++ sqlite3/src/tclsqlite.c	2007-04-10 07:47:49.000000000 +0200
 @@ -14,6 +14,7 @@
  **
- ** $Id: mingw-cross-build.sh,v 1.109 2020/06/20 11:55:37 chw Exp chw $
+ ** $Id: mingw-cross-build.sh,v 1.113 2023/10/23 13:31:50 chw Exp chw $
  */
 +#ifndef NO_TCL     /* Omit this whole file if TCL is unavailable */
  #include "tcl.h"
@@ -849,7 +912,8 @@ test "$VER3" = "3.8.8" -o "$VER3" = "3.8.9" -o "$VER3" = "3.8.10" \
   -o "$VER3" = "3.12.2" -o "$VER3" = "3.13.0" -o "$VER3" = "3.14.0" \
   -o "$VER3" = "3.14.1" -o "$VER3" = "3.15.0" -o "$VER3" = "3.15.1" \
   -o "$VER3" = "3.15.2" -o "$VER3" = "3.19.3" -o "$VER3" = "3.22.0" \
-  -o "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+  -o "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" \
+  -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/src/tclsqlite.c    2015-01-16 14:47:26.000000000 +0100
 +++ sqlite3/src/tclsqlite.c 2015-01-19 17:56:26.517386413 +0100
@@ -1023,6 +1087,7 @@ test "$VER3" != "3.6.21" -a "$VER3" != "3.6.22" -a "$VER3" != "3.6.23" \
   -a "$VER3" != "3.14.0" -a "$VER3" != "3.14.1" -a "$VER3" != "3.15.0" \
   -a "$VER3" != "3.15.1" -a "$VER3" != "3.15.2" -a "$VER3" != "3.19.3" \
   -a "$VER3" != "3.22.0" -a "$VER3" != "3.32.2" -a "$VER3" != "3.32.3" \
+  -a "$VER3" != "3.42.0" -a "$VER3" != "3.43.0" -a "$VER3" != "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/ext/fts3/fts3.c 2008-02-02 17:24:34.000000000 +0100
 +++ sqlite3/ext/fts3/fts3.c      2008-03-16 11:29:02.000000000 +0100
@@ -1046,6 +1111,59 @@ test "$VER3" != "3.6.21" -a "$VER3" != "3.6.22" -a "$VER3" != "3.6.23" \
  int sqlite3_extension_init(
    sqlite3 *db, 
    char **pzErrMsg,
+--- sqlite3.orig/ext/fts3/fts3_porter.c  2008-02-01 16:40:34.000000000 +0100
++++ sqlite3/ext/fts3/fts3_porter.c       2008-03-16 11:34:50.000000000 +0100
+@@ -31,6 +31,11 @@
+ #include <string.h>
+ #include <ctype.h>
+ 
++#include "sqlite3ext.h"
++#ifndef SQLITE_CORE
++extern const sqlite3_api_routines *sqlite3_api;
++#endif
++
+ #include "fts3_tokenizer.h"
+ 
+ /*
+--- sqlite3.orig/ext/fts3/fts3_tokenizer1.c      2007-11-23 18:31:18.000000000 +0100
++++ sqlite3/ext/fts3/fts3_tokenizer1.c   2008-03-16 11:35:37.000000000 +0100
+@@ -31,6 +31,11 @@
+ #include <string.h>
+ #include <ctype.h>
+ 
++#include "sqlite3ext.h"
++#ifndef SQLITE_CORE
++extern const sqlite3_api_routines *sqlite3_api;
++#endif
++
+ #include "fts3_tokenizer.h"
+ 
+ typedef struct simple_tokenizer {
+--- sqlite3.orig/ext/fts3/fts3_hash.c    2007-11-24 01:41:52.000000000 +0100
++++ sqlite3/ext/fts3/fts3_hash.c 2008-03-16 11:39:57.000000000 +0100
+@@ -29,6 +29,11 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#include "sqlite3ext.h"
++#ifndef SQLITE_CORE
++extern const sqlite3_api_routines *sqlite3_api;
++#endif
++
+ #include "sqlite3.h"
+ #include "fts3_hash.h"
+ 
+--- sqlite3.orig/ext/fts3/fts3_tokenizer.c	2008-06-24 03:29:58.000000000 +0200
++++ sqlite3/ext/fts3/fts3_tokenizer.c	2008-07-17 08:38:24.000000000 +0200
+@@ -27,7 +27,7 @@
+ 
+ #include "sqlite3ext.h"
+ #ifndef SQLITE_CORE
+-  SQLITE_EXTENSION_INIT1
++extern const sqlite3_api_routines *sqlite3_api;
+ #endif
+ 
+ #include "fts3_hash.h"
 EOD
 test "$VER3" = "3.6.21" -o "$VER3" = "3.6.22" -o "$VER3" = "3.6.23" \
   -o "$VER3" = "3.6.23.1" -o "$VER3" = "3.7.0" -o "$VER3" = "3.7.0.1" \
@@ -1121,7 +1239,8 @@ test "$VER3" != "3.7.8" -a "$VER3" != "3.7.9" -a "$VER3" != "3.7.10" \
   -a "$VER3" != "3.13.0" -a "$VER3" != "3.14.0" -a "$VER3" != "3.14.1" \
   -a "$VER3" != "3.15.0" -a "$VER3" != "3.15.1" -a "$VER3" != "3.15.2" \
   -a "$VER3" != "3.19.3" -a "$VER3" != "3.22.0" -a "$VER3" != "3.32.2" \
-  -a "$VER3" != "3.32.3" \
+  -a "$VER3" != "3.32.3" -a "$VER3" != "3.42.0" -a "$VER3" != "3.43.0" \
+  -a "$VER3" != "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/ext/fts3/fts3_hash.c    2007-11-24 01:41:52.000000000 +0100
 +++ sqlite3/ext/fts3/fts3_hash.c 2008-03-16 11:39:57.000000000 +0100
@@ -1471,6 +1590,7 @@ test "$VER3" != "3.8.0" -a "$VER3" != "3.8.1" -a "$VER3" != "3.8.2" \
   -a "$VER3" != "3.14.0" -a "$VER3" != "3.14.1" -a "$VER3" != "3.15.0" \
   -a "$VER3" != "3.15.1" -a "$VER3" != "3.15.2" -a "$VER3" != "3.19.3" \
   -a "$VER3" != "3.22.0" -a "$VER3" != "3.32.2" -a "$VER3" != "3.32.3" \
+  -a "$VER3" != "3.42.0" -a "$VER3" != "3.43.0" -a "$VER3" != "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/ext/rtree/rtree.c	2008-07-16 16:43:35.000000000 +0200
 +++ sqlite3/ext/rtree/rtree.c	2008-07-17 08:59:53.000000000 +0200
@@ -1519,7 +1639,8 @@ test "$VER3" = "3.7.3" -o "$VER3" = "3.7.4" -o "$VER3" = "3.7.5" \
 EOD
 
 # patch: fix rtree to be loadable as extension module
-test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" \
+  -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && perl -pi -e 's/sqlite3_rtree_init/sqlite3_extension_init/g' \
     sqlite3/ext/rtree/rtree.c
 
@@ -1559,6 +1680,7 @@ test "$VER3" = "3.7.7" -o "$VER3" = "3.7.7.1" -o "$VER3" = "3.7.8" \
   -o "$VER3" = "3.14.0" -o "$VER3" = "3.14.1" -o "$VER3" = "3.15.0" \
   -o "$VER3" = "3.15.1" -o "$VER3" = "3.15.2" -o "$VER3" = "3.19.3" \
   -o "$VER3" = "3.22.0" -o "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+  -o "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/ext/fts3/fts3_aux.c	2011-06-24 09:06:08.000000000 +0200
 +++ sqlite3/ext/fts3/fts3_aux.c	2011-06-25 06:44:08.000000000 +0200
@@ -1614,7 +1736,8 @@ test "$VER3" = "3.7.8" -o "$VER3" = "3.7.9" -o "$VER3" = "3.7.10" \
   -o "$VER3" = "3.13.0" -o "$VER3" = "3.14.0" -o "$VER3" = "3.14.1" \
   -o "$VER3" = "3.15.0" -o "$VER3" = "3.15.1" -o "$VER3" = "3.15.2" \
   -o "$VER3" = "3.19.3" -o "$VER3" = "3.22.0" -o "$VER3" = "3.32.2" \
-  -o "$VER3" = "3.32.3" \
+  -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" \
+  -o "$VER3" = "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/ext/fts3/fts3.c	2011-09-19 20:46:52.000000000 +0200
 +++ sqlite3/ext/fts3/fts3.c	2011-09-20 09:47:40.000000000 +0200
@@ -1655,6 +1778,7 @@ test "$VER3" = "3.7.7" -o "$VER3" = "3.7.7.1" -o "$VER3" = "3.7.8" \
   -o "$VER3" = "3.14.0" -o "$VER3" = "3.14.1" -o "$VER3" = "3.15.0" \
   -o "$VER3" = "3.15.1" -o "$VER3" = "3.15.2" -o "$VER3" = "3.19.3" \
   -o "$VER3" = "3.22.0" -o "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+  -o "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/ext/fts3/fts3_expr.c	2011-06-24 09:06:08.000000000 +0200
 +++ sqlite3/ext/fts3/fts3_expr.c	2011-06-25 06:47:00.000000000 +0200
@@ -1835,7 +1959,8 @@ test "$VER3" = "3.8.0" -o "$VER3" = "3.8.1" -o "$VER3" = "3.8.2" \
          zAltEntry[iEntry++] = (char)sqlite3UpperToLower[(unsigned)c];
 EOD
 
-test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" \
+  -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/src/loadext.c	2020-06-04 16:01:10.000000000 +0200
 +++ sqlite3/src/loadext.c	2020-06-12 05:47:05.000000000 +0200
@@ -1861,7 +1986,8 @@ test "$VER3" = "3.8.2" -o "$VER3" = "3.8.3" -o "$VER3" = "3.8.4" \
   -o "$VER3" = "3.13.0" -o "$VER3" = "3.14.0" -o "$VER3" = "3.14.1" \
   -o "$VER3" = "3.15.0" -o "$VER3" = "3.15.1" -o "$VER3" = "3.15.2" \
   -o "$VER3" = "3.19.3" -o "$VER3" = "3.22.0" -o "$VER3" = "3.32.2" \
-  -o "$VER3" = "3.32.3" \
+  -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" \
+  -o "$VER3" = "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/ext/fts3/fts3.c      2014-03-26 10:26:28.000000000 +0100
 +++ sqlite3/ext/fts3/fts3.c  2014-03-26 16:54:39.000000000 +0100
@@ -1884,6 +2010,7 @@ test "$VER3" = "3.8.7" -o "$VER3" = "3.8.8" -o "$VER3" = "3.8.9" \
   -o "$VER3" = "3.14.0" -o "$VER3" = "3.14.1" -o "$VER3" = "3.15.0" \
   -o "$VER3" = "3.15.1" -o "$VER3" = "3.15.2" -o "$VER3" = "3.19.3" \
   -o "$VER3" = "3.22.0" -o "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+  -o "$VER3" = "3.42.0" -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && patch -d sqlite3 -p1 <<'EOD'
 --- sqlite3.orig/src/threads.c      2014-10-17 13:38:27.000000000 +0200
 +++ sqlite3/src/threads.c   2014-10-26 13:40:26.000000000 +0100
@@ -1926,7 +2053,8 @@ test "$VER3" = "3.10.0" -o "$VER3" = "3.10.2" -o "$VER3" = "3.12.2" \
   -o "$VER3" = "3.19.3" -o "$VER3" = "3.22.0" \
   && perl -pi -e 's/ rb\]/ r\]/g' sqlite3/tool/mkopcodec.tcl \
       sqlite3/tool/tostr.tcl sqlite3/tool/addopcodes.tcl
-test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" \
+  -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && perl -pi -e 's/ rb\]/ r\]/g' sqlite3/tool/mkopcodec.tcl \
       sqlite3/tool/mkccode.tcl
 
@@ -2039,7 +2167,8 @@ test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
  #   define access(f,m) _access((f),(m))
 EOD
 # rtree using internal core func
-test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" \
+test "$VER3" = "3.32.2" -o "$VER3" = "3.32.3" -o "$VER3" = "3.42.0" \
+  -o "$VER3" = "3.43.0" -o "$VER3" = "3.43.2" \
   && patch sqlite3/ext/rtree/rtree.c <<'EOD'
 --- rtree.c.orig	2020-06-04 16:01:10.000000000 +0200
 +++ rtree.c	2020-06-12 11:51:49.000000000 +0200

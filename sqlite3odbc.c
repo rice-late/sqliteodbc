@@ -2,9 +2,9 @@
  * @file sqlite3odbc.c
  * SQLite3 ODBC Driver main module.
  *
- * $Id: sqlite3odbc.c,v 1.179 2020/06/20 11:56:09 chw Exp chw $
+ * $Id: sqlite3odbc.c,v 1.183 2023/10/23 13:33:58 chw Exp chw $
  *
- * Copyright (c) 2004-2020 Christian Werner <chw@ch-werner.de>
+ * Copyright (c) 2004-2023 Christian Werner <chw@ch-werner.de>
  *
  * See the file "license.terms" for information on usage
  * and redistribution of this file and for a
@@ -117,66 +117,66 @@ static struct dl_sqlite3_funcs {
     int (*value_type)(sqlite3_value *p0);
 } dls_funcs;
 
-#define sqlite3_activate_see          dls_funcs.activate_see
-#define sqlite3_bind_blob             dls_funcs.bind_blob
-#define sqlite3_bind_double           dls_funcs.bind_double
-#define sqlite3_bind_int              dls_funcs.bind_int
-#define sqlite3_bind_int64            dls_funcs.bind_int64
-#define sqlite3_bind_null             dls_funcs.bind_null
+#define sqlite3_activate_see	      dls_funcs.activate_see
+#define sqlite3_bind_blob	      dls_funcs.bind_blob
+#define sqlite3_bind_double	      dls_funcs.bind_double
+#define sqlite3_bind_int	      dls_funcs.bind_int
+#define sqlite3_bind_int64	      dls_funcs.bind_int64
+#define sqlite3_bind_null	      dls_funcs.bind_null
 #define sqlite3_bind_parameter_count  dls_funcs.bind_parameter_count
-#define sqlite3_bind_text             dls_funcs.bind_text
-#define sqlite3_busy_handler          dls_funcs.busy_handler
-#define sqlite3_changes               dls_funcs.changes
-#define sqlite3_close                 dls_funcs.close
-#define sqlite3_column_blob           dls_funcs.column_blob
-#define sqlite3_column_bytes          dls_funcs.column_bytes
-#define sqlite3_column_count          dls_funcs.column_count
+#define sqlite3_bind_text	      dls_funcs.bind_text
+#define sqlite3_busy_handler	      dls_funcs.busy_handler
+#define sqlite3_changes		      dls_funcs.changes
+#define sqlite3_close		      dls_funcs.close
+#define sqlite3_column_blob	      dls_funcs.column_blob
+#define sqlite3_column_bytes	      dls_funcs.column_bytes
+#define sqlite3_column_count	      dls_funcs.column_count
 #define sqlite3_column_database_name  dls_funcs.column_database_name
 #define sqlite3_column_decltype       dls_funcs.column_decltype
-#define sqlite3_column_double         dls_funcs.column_double
-#define sqlite3_column_name           dls_funcs.column_name
+#define sqlite3_column_double	      dls_funcs.column_double
+#define sqlite3_column_name	      dls_funcs.column_name
 #define sqlite3_column_origin_name    dls_funcs.column_origin_name
 #define sqlite3_column_table_name     dls_funcs.column_table_name
-#define sqlite3_column_text           dls_funcs.column_text
-#define sqlite3_column_type           dls_funcs.column_type
+#define sqlite3_column_text	      dls_funcs.column_text
+#define sqlite3_column_type	      dls_funcs.column_type
 #define sqlite3_create_function       dls_funcs.create_function
 #define sqlite3_enable_load_extension dls_funcs.enable_load_extension
-#define sqlite3_errcode               dls_funcs.errcode
-#define sqlite3_errmsg                dls_funcs.errmsg
-#define sqlite3_exec                  dls_funcs.exec
-#define sqlite3_finalize              dls_funcs.finalize
-#define sqlite3_free                  dls_funcs.free
-#define sqlite3_free_table            dls_funcs.free_table
-#define sqlite3_get_table             dls_funcs.get_table
-#define sqlite3_interrupt             dls_funcs.interrupt
-#define sqlite3_key                   dls_funcs.key
+#define sqlite3_errcode		      dls_funcs.errcode
+#define sqlite3_errmsg		      dls_funcs.errmsg
+#define sqlite3_exec		      dls_funcs.exec
+#define sqlite3_finalize	      dls_funcs.finalize
+#define sqlite3_free		      dls_funcs.free
+#define sqlite3_free_table	      dls_funcs.free_table
+#define sqlite3_get_table	      dls_funcs.get_table
+#define sqlite3_interrupt	      dls_funcs.interrupt
+#define sqlite3_key		      dls_funcs.key
 #define sqlite3_last_insert_rowid     dls_funcs.last_insert_rowid
-#define sqlite3_libversion            dls_funcs.libversion
-#define sqlite3_load_extension        dls_funcs.load_extension
-#define sqlite3_malloc                dls_funcs.malloc
-#define sqlite3_mprintf               dls_funcs.mprintf
-#define sqlite3_open                  dls_funcs.open
-#define sqlite3_open16                dls_funcs.open16
-#define sqlite3_open_v2               dls_funcs.open_v2
-#define sqlite3_prepare               dls_funcs.prepare
-#define sqlite3_prepare_v2            dls_funcs.prepare_v2
-#define sqlite3_profile               dls_funcs.profile
-#define sqlite3_realloc               dls_funcs.realloc
-#define sqlite3_rekey                 dls_funcs.rekey
-#define sqlite3_reset                 dls_funcs.reset
-#define sqlite3_result_blob           dls_funcs.result_blob
-#define sqlite3_result_error          dls_funcs.result_error
-#define sqlite3_result_int            dls_funcs.result_int
-#define sqlite3_result_null           dls_funcs.result_null
-#define sqlite3_step                  dls_funcs.step
-#define sqlite3_strnicmp              dls_funcs.xstrnicmp
+#define sqlite3_libversion	      dls_funcs.libversion
+#define sqlite3_load_extension	      dls_funcs.load_extension
+#define sqlite3_malloc		      dls_funcs.malloc
+#define sqlite3_mprintf		      dls_funcs.mprintf
+#define sqlite3_open		      dls_funcs.open
+#define sqlite3_open16		      dls_funcs.open16
+#define sqlite3_open_v2		      dls_funcs.open_v2
+#define sqlite3_prepare		      dls_funcs.prepare
+#define sqlite3_prepare_v2	      dls_funcs.prepare_v2
+#define sqlite3_profile		      dls_funcs.profile
+#define sqlite3_realloc		      dls_funcs.realloc
+#define sqlite3_rekey		      dls_funcs.rekey
+#define sqlite3_reset		      dls_funcs.reset
+#define sqlite3_result_blob	      dls_funcs.result_blob
+#define sqlite3_result_error	      dls_funcs.result_error
+#define sqlite3_result_int	      dls_funcs.result_int
+#define sqlite3_result_null	      dls_funcs.result_null
+#define sqlite3_step		      dls_funcs.step
+#define sqlite3_strnicmp	      dls_funcs.xstrnicmp
 #define sqlite3_table_column_metadata dls_funcs.table_column_metadata
-#define sqlite3_trace                 dls_funcs.trace
-#define sqlite3_user_data             dls_funcs.user_data
-#define sqlite3_value_blob            dls_funcs.value_blob
-#define sqlite3_value_bytes           dls_funcs.value_bytes
-#define sqlite3_value_text            dls_funcs.value_text
-#define sqlite3_value_type            dls_funcs.value_type
+#define sqlite3_trace		      dls_funcs.trace
+#define sqlite3_user_data	      dls_funcs.user_data
+#define sqlite3_value_blob	      dls_funcs.value_blob
+#define sqlite3_value_bytes	      dls_funcs.value_bytes
+#define sqlite3_value_text	      dls_funcs.value_text
+#define sqlite3_value_type	      dls_funcs.value_type
 
 #endif
 
@@ -649,7 +649,7 @@ dsappend(dstr *dsp, const char *str)
 	if (max < len) {
 	    max += len;
 	}
-	dsp = xmalloc(max);
+	dsp = xmalloc(max + sizeof (*dsp));
 	if (dsp) {
 	    dsp->max = max;
 	    dsp->len = dsp->oom = 0;
@@ -662,7 +662,7 @@ dsappend(dstr *dsp, const char *str)
     }
     if (dsp->len + len > dsp->max) {
 	int max = dsp->max + len + 256;
-	dstr *ndsp = xrealloc(dsp, max);
+	dstr *ndsp = xrealloc(dsp, max + sizeof (*dsp));
 
 	if (!ndsp) {
 	    strcpy(dsp->buffer, "OUT OF MEMORY");
@@ -709,7 +709,7 @@ dsappendq(dstr *dsp, const char *str)
 	if (max < len) {
 	    max += len;
 	}
-	dsp = xmalloc(max);
+	dsp = xmalloc(max + sizeof (*dsp));
 	if (dsp) {
 	    dsp->max = max;
 	    dsp->len = dsp->oom = 0;
@@ -722,7 +722,7 @@ dsappendq(dstr *dsp, const char *str)
     }
     if (dsp->len + len > dsp->max) {
 	int max = dsp->max + len + 256;
-	dstr *ndsp = xrealloc(dsp, max);
+	dstr *ndsp = xrealloc(dsp, max + sizeof (*dsp));
 
 	if (!ndsp) {
 	    strcpy(dsp->buffer, "OUT OF MEMORY");
@@ -1404,6 +1404,9 @@ drvgettable_row(TBLRES *t, int ncol, int rc)
 	char **resnew;
 	int nalloc = t->nalloc * 2 + need + 1;
 
+	if (nalloc < t->nalloc) {
+	    goto nomem;
+	}
 	resnew = xrealloc(t->resarr, sizeof (char *) * nalloc);
 	if (!resnew) {
 nomem:
@@ -2305,8 +2308,8 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
     case SQL_INTEGER:       m = 10; d = 9; break;
     case SQL_TINYINT:       m = 4; d = 3; break;
     case SQL_SMALLINT:      m = 6; d = 5; break;
-    case SQL_FLOAT:         m = 25; d = 24; break;
-    case SQL_DOUBLE:        m = 54; d = 53; break;
+    case SQL_FLOAT:	    m = 25; d = 24; break;
+    case SQL_DOUBLE:	    m = 54; d = 53; break;
     case SQL_VARCHAR:       m = 255; d = 0; break;
 #ifdef WINTERFACE
 #ifdef SQL_WVARCHAR
@@ -2316,11 +2319,11 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
 #ifdef SQL_TYPE_DATE
     case SQL_TYPE_DATE:
 #endif
-    case SQL_DATE:          m = 10; d = 0; break;
+    case SQL_DATE:	    m = 10; d = 0; break;
 #ifdef SQL_TYPE_TIME
     case SQL_TYPE_TIME:
 #endif
-    case SQL_TIME:          m = 8; d = 0; break;
+    case SQL_TIME:	    m = 8; d = 0; break;
 #ifdef SQL_TYPE_TIMESTAMP
     case SQL_TYPE_TIMESTAMP:
 #endif
@@ -2337,7 +2340,7 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
     case SQL_VARBINARY:     m = 255; d = 0; break;
     case SQL_LONGVARBINARY: m = 65536; d = 0; break;
 #ifdef SQL_BIGINT
-    case SQL_BIGINT:        m = 20; d = 19; break;
+    case SQL_BIGINT:	    m = 20; d = 19; break;
 #endif
 #ifdef SQL_BIT
     case SQL_BIT:	    m = 1; d = 1; break;
@@ -2573,6 +2576,18 @@ errout:
 	    }
 	    *p++ = *q;
 	    break;
+	case '-':
+	    *p++ = *q;
+	    if (!inq && q[1] == '-') {
+		++q;
+		while (*q) {
+		    *p++ = *q++;
+		    if (*q == '\n') {
+			break;
+		    }
+		}
+	    }
+	    break;
 	case '?':
 	    *p++ = *q;
 	    if (!inq) {
@@ -2740,6 +2755,65 @@ errout:
 	}
     }
     return out;
+}
+
+/**
+ * Replace ILIKE with LIKE in-place given query string.
+ * @param sql original query string
+ */
+
+static void
+replilike(char *sql)
+{
+    char *q = sql, *inq = NULL;
+
+    while (*q) {
+	switch (*q) {
+	case '\'':
+	case '\"':
+	    if (q == inq) {
+		inq = NULL;
+	    } else if (!inq) {
+		inq = q + 1;
+
+		while (*inq) {
+		    if (*inq == *q) {
+			if (inq[1] == *q) {
+			    inq++;
+			} else {
+			    break;
+			}
+		    }
+		    inq++;
+		}
+	    }
+	    break;
+	case '-':
+	    if (!inq && q[1] == '-') {
+		++q;
+		while (*q) {
+		    if (*q == '\n') {
+			break;
+		    }
+		}
+	    }
+	    break;
+	default:
+	    if (!inq && ISSPACE(*q) && q[1]) {
+		if (strncasecmp(q + 1, "ilike", 5) == 0) {
+		    if ((q[2] != '\0') && (q[3] != '\0') &&
+			(q[4] != '\0') && (q[5] != '\0') &&
+			((q[6] == '\0') || ISSPACE(q[6]))) {
+			q++;
+			memmove(q, q + 1, strlen(q));
+			q += 3;
+		    }
+		}
+	    }
+	    break;
+	}
+	++q;
+    }
 }
 
 /**
@@ -4180,6 +4254,44 @@ dbloadext(DBC *d, char *exts)
 }
 
 /**
+ * Perform ATTACH commands to same database file
+ * @param d DBC pointer
+ * @param attas string, comma separated names
+ */
+
+static void
+dbattas(DBC *d, char *attas)
+{
+    char *p;
+    char as[SQL_MAX_MESSAGE_LENGTH];
+
+    if (!d->sqlite) {
+	return;
+    }
+    do {
+	p = strchr(attas, ',');
+	if (p) {
+	    strncpy(as, attas, p - attas);
+	    as[p - attas] = '\0';
+	} else {
+	    strcpy(as, attas);
+	}
+	if (attas[0]) {
+	    char *sql;
+
+	    sql = sqlite3_mprintf("ATTACH %Q AS %s", d->dbname, as);
+	    if (sql != NULL) {
+		sqlite3_exec(d->sqlite, sql, NULL, NULL, NULL);
+		sqlite3_free(sql);
+	    }
+	}
+	if (p) {
+	    attas = p + 1;
+	}
+    } while (p);
+}
+
+/**
  * Find out column type
  * @param s3stmt SQLite statement pointer
  * @param col column number
@@ -5087,11 +5199,7 @@ setupparam(STMT *s, char *sql, int pnum)
     switch (type) {
     case SQL_C_BINARY:
 	p->s3type = SQLITE_BLOB;
-	p->s3size = p->len;
 	p->s3val = p->param;
-	if (p->need < 0) {
-	    break;
-	}
 	if (!p->lenp) {
 	    len = p->len;
 	} else if (*p->lenp == SQL_DATA_AT_EXEC) {
@@ -5108,7 +5216,6 @@ setupparam(STMT *s, char *sql, int pnum)
 	}
 	p->len = len;
 	p->max = p->len;
-	p->need = -1;
 	p->s3size = len;
 	break;
 #ifdef WCHARSUPPORT
@@ -11417,7 +11524,7 @@ drvgetinfo(SQLHDBC dbc, SQLUSMALLINT type, SQLPOINTER val, SQLSMALLINT valMax,
 	*valLen = sizeof (SQLUINTEGER);
 	break;
     case SQL_CORRELATION_NAME:
-	*((SQLSMALLINT *) val) = SQL_CN_DIFFERENT;
+	*((SQLSMALLINT *) val) = SQL_CN_ANY;
 	*valLen = sizeof (SQLSMALLINT);
 	break;
     case SQL_NON_NULLABLE_COLUMNS:
@@ -12350,7 +12457,6 @@ drvsetconnectattr(SQLHDBC dbc, SQLINTEGER attr, SQLPOINTER val,
 	    s3stmt_end(d->cur_s3stmt);
 	}
 	break;
-	return SQL_SUCCESS;
 #ifdef SQL_ATTR_METADATA_ID
     case SQL_ATTR_METADATA_ID:
 	if (val == (SQLPOINTER) SQL_FALSE) {
@@ -12692,10 +12798,10 @@ drvconnect(SQLHDBC dbc, SQLCHAR *dsn, SQLSMALLINT dsnLen, char *pwd,
     SQLRETURN ret;
     char buf[SQL_MAX_MESSAGE_LENGTH * 6], dbname[SQL_MAX_MESSAGE_LENGTH];
     char busy[SQL_MAX_MESSAGE_LENGTH / 4], tracef[SQL_MAX_MESSAGE_LENGTH];
-    char loadext[SQL_MAX_MESSAGE_LENGTH];
+    char loadext[SQL_MAX_MESSAGE_LENGTH], attas[SQL_MAX_MESSAGE_LENGTH];
     char sflag[32], spflag[32], ntflag[32], nwflag[32], biflag[32];
     char snflag[32], lnflag[32], ncflag[32], fkflag[32], jmode[32];
-    char jdflag[32];
+    char jdflag[32], ilflag[32];
 #if defined(_WIN32) || defined(_WIN64)
     char oemcp[32];
 #endif
@@ -12778,6 +12884,10 @@ drvconnect(SQLHDBC dbc, SQLCHAR *dsn, SQLSMALLINT dsnLen, char *pwd,
 #endif
     biflag[0] = '\0';
     getdsnattr(buf, "bigint", biflag, sizeof (biflag));
+    attas[0] = '\0';
+    getdsnattr(buf, "attachas", attas, sizeof (attas));
+    ilflag[0] = '\0';
+    getdsnattr(buf, "ilike", ilflag, sizeof (ilflag));
 #else
     SQLGetPrivateProfileString(buf, "timeout", "100000",
 			       busy, sizeof (busy), ODBC_INI);
@@ -12815,6 +12925,10 @@ drvconnect(SQLHDBC dbc, SQLCHAR *dsn, SQLSMALLINT dsnLen, char *pwd,
 #endif
     SQLGetPrivateProfileString(buf, "bigint", "",
 			       biflag, sizeof (biflag), ODBC_INI);
+    SQLGetPrivateProfileString(buf, "attachas", "",
+			       attas, sizeof (attas), ODBC_INI);
+    SQLGetPrivateProfileString(buf, "ilike", "",
+			       ilflag, sizeof (ilflag), ODBC_INI);
 #endif
     tracef[0] = '\0';
 #ifdef WITHOUT_DRIVERMGR
@@ -12832,6 +12946,7 @@ drvconnect(SQLHDBC dbc, SQLCHAR *dsn, SQLSMALLINT dsnLen, char *pwd,
     d->nocreat = getbool(ncflag);
     d->fksupport = getbool(fkflag);
     d->jdconv = getbool(jdflag);
+    d->ilike = getbool(ilflag);
 #if defined(_WIN32) || defined(_WIN64)
     d->oemcp = getbool(oemcp);
 #else
@@ -12847,6 +12962,7 @@ drvconnect(SQLHDBC dbc, SQLCHAR *dsn, SQLSMALLINT dsnLen, char *pwd,
 		  jmode, busy);
     if (ret == SQL_SUCCESS) {
 	dbloadext(d, loadext);
+	dbattas(d, attas);
     }
     return ret;
 }
@@ -13018,10 +13134,10 @@ drvdriverconnect(SQLHDBC dbc, SQLHWND hwnd,
     char buf[SQL_MAX_MESSAGE_LENGTH * 8], dbname[SQL_MAX_MESSAGE_LENGTH];
     char dsn[SQL_MAX_MESSAGE_LENGTH], busy[SQL_MAX_MESSAGE_LENGTH / 4];
     char tracef[SQL_MAX_MESSAGE_LENGTH], loadext[SQL_MAX_MESSAGE_LENGTH];
-    char pwd[SQL_MAX_MESSAGE_LENGTH];
+    char pwd[SQL_MAX_MESSAGE_LENGTH], attas[SQL_MAX_MESSAGE_LENGTH];
     char sflag[32], spflag[32], ntflag[32], snflag[32], lnflag[32];
     char ncflag[32], nwflag[32], fkflag[32], jmode[32], biflag[32];
-    char jdflag[32];
+    char jdflag[32], ilflag[32];
 
     if (dbc == SQL_NULL_HDBC) {
 	return SQL_INVALID_HANDLE;
@@ -13181,6 +13297,22 @@ drvdriverconnect(SQLHDBC dbc, SQLHWND hwnd,
 				   pwd, sizeof (pwd), ODBC_INI);
     }
 #endif
+    attas[0] = '\0';
+    getdsnattr(buf, "attachas", attas, sizeof (attas));
+#ifndef WITHOUT_DRIVERMGR
+    if (dsn[0] && !attas[0]) {
+	SQLGetPrivateProfileString(dsn, "attachas", "",
+				   attas, sizeof (attas), ODBC_INI);
+    }
+#endif
+    ilflag[0] = '\0';
+    getdsnattr(buf, "ilike", ilflag, sizeof (ilflag));
+#ifndef WITHOUT_DRIVERMGR
+    if (dsn[0] && !ilflag[0]) {
+	SQLGetPrivateProfileString(dsn, "ilike", "",
+				   ilflag, sizeof (ilflag), ODBC_INI);
+    }
+#endif
 
     if (!dbname[0] && !dsn[0]) {
 	strcpy(dsn, "SQLite");
@@ -13204,10 +13336,10 @@ drvdriverconnect(SQLHDBC dbc, SQLHWND hwnd,
 			 "SyncPragma=%s;NoTXN=%s;ShortNames=%s;LongNames=%s;"
 			 "NoCreat=%s;NoWCHAR=%s;FKSupport=%s;Tracefile=%s;"
 			 "JournalMode=%s;LoadExt=%s;BigInt=%s;JDConv=%s;"
-			 "PWD=%s",
+			 "PWD=%s;AttachAs=%s;ILike=%s",
 			 dsn, dbname, sflag, busy, spflag, ntflag,
 			 snflag, lnflag, ncflag, nwflag, fkflag, tracef,
-			 jmode, loadext, biflag, jdflag, pwd);
+			 jmode, loadext, biflag, jdflag, pwd, attas, ilflag);
 	if (count < 0) {
 	    buf[sizeof (buf) - 1] = '\0';
 	}
@@ -13230,6 +13362,7 @@ drvdriverconnect(SQLHDBC dbc, SQLHWND hwnd,
     d->fksupport = getbool(fkflag);
     d->dobigint = getbool(biflag);
     d->jdconv = getbool(jdflag);
+    d->ilike = getbool(ilflag);
     d->oemcp = 0;
     d->pwdLen = strlen(pwd);
     d->pwd = (d->pwdLen > 0) ? pwd : NULL;
@@ -13237,6 +13370,7 @@ drvdriverconnect(SQLHDBC dbc, SQLHWND hwnd,
     memset(pwd, 0, sizeof (pwd));
     if (ret == SQL_SUCCESS) {
 	dbloadext(d, loadext);
+	dbattas(d, attas);
     }
     return ret;
 }
@@ -13326,6 +13460,7 @@ drvallocstmt(SQLHDBC dbc, SQLHSTMT *stmt)
     s->bkmrkptr = 0;
     s->oemcp = &d->oemcp;
     s->jdconv = &d->jdconv;
+    s->ilike = &d->ilike;
     s->nowchar[0] = d->nowchar;
     s->nowchar[1] = 0;
     s->dobigint = d->dobigint;
@@ -16635,10 +16770,14 @@ drvfetchscroll(SQLHSTMT stmt, SQLSMALLINT orient, SQLINTEGER offset)
 	goto done2;
     }
     if (s->isselect != 1 && s->isselect != -1) {
-	setstat(s, -1, "no result set available", "24000");
-	ret = SQL_ERROR;
-	i = s->nrows;
-	goto done2;
+	if (s->isselect != 0 || s->ncols <= 0) {
+	    setstat(s, -1, "no result set available", "24000");
+	    ret = SQL_ERROR;
+	    i = s->nrows;
+	    goto done2;
+	} else {
+	    /* INSERT/UPDATE/DELETE ... RETURNING ... has columns */
+	}
     }
     if (s->curtype == SQL_CURSOR_FORWARD_ONLY && orient != SQL_FETCH_NEXT) {
 	setstat(s, -1, "wrong fetch direction", "01000");
@@ -18575,6 +18714,9 @@ noconn:
 	}
 	return nomem(s);
     }
+    if (*s->ilike) {
+	replilike((char *) s->query);
+    }
     errp = NULL;
     freeresult(s, -1);
     if (s->isselect == 1) {
@@ -18625,6 +18767,8 @@ noconn:
 	setupdyncols(s, s3stmt, &ncols);
 	s->ncols = ncols;
 	s->s3stmt = s3stmt;
+    } else {
+	s->guessed_types = 1;
     }
     mkbindcols(s, s->ncols);
     s->paramset_count = 0;
@@ -18779,11 +18923,17 @@ again:
     s->rowfree = freerows;
     if (s->isselect <= 0 || s->isselect > 1) {
 	/*
-	 * INSERT/UPDATE/DELETE or DDL results are immediately released.
+	 * DDL results are immediately released.
+	 * INSERT/UPDATE/DELETE depends on number of columns in
+	 * result set, if zero, result is immediately released.
 	 */
-	freeresult(s, -1);
-	nrows += sqlite3_changes(d->sqlite);
-	s->nrows = nrows;
+	if (s->isselect != 0 || ncols == 0) {
+	    freeresult(s, -1);
+	    nrows += sqlite3_changes(d->sqlite);
+	    s->nrows = nrows;
+	} else {
+	    s->ncols = ncols;
+	}
 	goto done;
     }
     if (s->ncols != ncols) {
@@ -19046,16 +19196,16 @@ done:
 #include <windowsx.h>
 #include <winuser.h>
 
-#define MAXPATHLEN      (259+1)           /* Max path length */
-#define MAXKEYLEN       (15+1)            /* Max keyword length */
-#define MAXDESC         (255+1)           /* Max description length */
-#define MAXDSNAME       (255+1)           /* Max data source name length */
-#define MAXTONAME       (32+1)            /* Max timeout length */
+#define MAXPATHLEN      (259+1)		/* Max path length */
+#define MAXKEYLEN       (15+1)		/* Max keyword length */
+#define MAXDESC		(255+1)		/* Max description length */
+#define MAXDSNAME       (255+1)		/* Max data source name length */
+#define MAXTONAME       (32+1)		/* Max timeout length */
 #define MAXDBNAME       MAXPATHLEN
 
 /* Attribute key indexes into an array of Attr structs, see below */
 
-#define KEY_DSN 		0
+#define KEY_DSN			0
 #define KEY_DESC		1
 #define KEY_DBNAME		2
 #define KEY_BUSY		3
@@ -19068,13 +19218,15 @@ done:
 #define KEY_NOCREAT	       10
 #define KEY_NOWCHAR	       11
 #define KEY_LOADEXT	       12
-#define KEY_JMODE              13
-#define KEY_FKSUPPORT          14
-#define KEY_OEMCP              15
-#define KEY_BIGINT             16
-#define KEY_PASSWD             17
-#define KEY_JDCONV             18
-#define NUMOFKEYS	       19
+#define KEY_JMODE	       13
+#define KEY_FKSUPPORT	       14
+#define KEY_OEMCP	       15
+#define KEY_BIGINT	       16
+#define KEY_PASSWD	       17
+#define KEY_JDCONV	       18
+#define KEY_ATTAS	       19
+#define KEY_ILIKE	       20
+#define NUMOFKEYS	       21
 
 typedef struct {
     BOOL supplied;
@@ -19114,6 +19266,8 @@ static struct {
     { "BigInt", KEY_BIGINT },
     { "PWD", KEY_PASSWD },
     { "JDConv", KEY_JDCONV },
+    { "AttachAs", KEY_ATTAS },
+    { "ILike", KEY_ILIKE },
     { NULL, 0 }
 };
 
@@ -19266,6 +19420,16 @@ SetDSNAttributes(HWND parent, SETUPDLG *setupdlg)
 				     setupdlg->attr[KEY_JDCONV].attr,
 				     ODBC_INI);
     }
+    if (parent || setupdlg->attr[KEY_ATTAS].supplied) {
+	SQLWritePrivateProfileString(dsn, "AttachAs",
+				     setupdlg->attr[KEY_ATTAS].attr,
+				     ODBC_INI);
+    }
+    if (parent || setupdlg->attr[KEY_ILIKE].supplied) {
+	SQLWritePrivateProfileString(dsn, "ILike",
+				     setupdlg->attr[KEY_ILIKE].attr,
+				     ODBC_INI);
+    }
     if (parent || setupdlg->attr[KEY_PASSWD].supplied) {
 	SQLWritePrivateProfileString(dsn, "PWD",
 				     setupdlg->attr[KEY_PASSWD].attr,
@@ -19390,6 +19554,18 @@ GetAttributes(SETUPDLG *setupdlg)
 				   sizeof (setupdlg->attr[KEY_JDCONV].attr),
 				   ODBC_INI);
     }
+    if (!setupdlg->attr[KEY_ATTAS].supplied) {
+	SQLGetPrivateProfileString(dsn, "AttachAs", "",
+				   setupdlg->attr[KEY_ATTAS].attr,
+				   sizeof (setupdlg->attr[KEY_ATTAS].attr),
+				   ODBC_INI);
+    }
+    if (!setupdlg->attr[KEY_ILIKE].supplied) {
+	SQLGetPrivateProfileString(dsn, "ILike", "",
+				   setupdlg->attr[KEY_ILIKE].attr,
+				   sizeof (setupdlg->attr[KEY_ILIKE].attr),
+				   ODBC_INI);
+    }
 }
 
 /**
@@ -19494,6 +19670,10 @@ ConfigDlgProc(HWND hdlg, WORD wmsg, WPARAM wparam, LPARAM lparam)
 	CheckDlgButton(hdlg, IDC_JDCONV,
 		       getbool(setupdlg->attr[KEY_JDCONV].attr) ?
 		       BST_CHECKED : BST_UNCHECKED);
+	SetDlgItemText(hdlg, IDC_ATTAS, setupdlg->attr[KEY_ATTAS].attr);
+	CheckDlgButton(hdlg, IDC_ILIKE,
+		       getbool(setupdlg->attr[KEY_ILIKE].attr) ?
+		       BST_CHECKED : BST_UNCHECKED);
 	SendDlgItemMessage(hdlg, IDC_SYNCP,
 			   CB_LIMITTEXT, (WPARAM) 10, (LPARAM) 0);
 	SendDlgItemMessage(hdlg, IDC_SYNCP,
@@ -19584,6 +19764,12 @@ ConfigDlgProc(HWND hdlg, WORD wmsg, WPARAM wparam, LPARAM lparam)
 		   "1" : "0");
 	    strcpy(setupdlg->attr[KEY_JDCONV].attr,
 		   (IsDlgButtonChecked(hdlg, IDC_JDCONV) == BST_CHECKED) ?
+		   "1" : "0");
+	    GetDlgItemText(hdlg, IDC_ATTAS,
+			   setupdlg->attr[KEY_ATTAS].attr,
+			   sizeof (setupdlg->attr[KEY_ATTAS].attr));
+	    strcpy(setupdlg->attr[KEY_ILIKE].attr,
+		   (IsDlgButtonChecked(hdlg, IDC_ILIKE) == BST_CHECKED) ?
 		   "1" : "0");
 	    SetDSNAttributes(hdlg, setupdlg);
 	    /* FALL THROUGH */
@@ -19733,6 +19919,10 @@ DriverConnectProc(HWND hdlg, WORD wmsg, WPARAM wparam, LPARAM lparam)
 	    EnableWindow(GetDlgItem(hdlg, IDC_DSNAME), FALSE);
 	    EnableWindow(GetDlgItem(hdlg, IDC_DSNAMETEXT), FALSE);
 	}
+	SetDlgItemText(hdlg, IDC_ATTAS, setupdlg->attr[KEY_ATTAS].attr);
+	CheckDlgButton(hdlg, IDC_ILIKE,
+		       getbool(setupdlg->attr[KEY_ILIKE].attr) ?
+		       BST_CHECKED : BST_UNCHECKED);
 	return TRUE;
     case WM_COMMAND:
 	switch (GET_WM_COMMAND_ID(wparam, lparam)) {
@@ -19793,6 +19983,12 @@ DriverConnectProc(HWND hdlg, WORD wmsg, WPARAM wparam, LPARAM lparam)
 		   "1" : "0");
 	    strcpy(setupdlg->attr[KEY_JDCONV].attr,
 		   (IsDlgButtonChecked(hdlg, IDC_JDCONV) == BST_CHECKED) ?
+		   "1" : "0");
+	    GetDlgItemText(hdlg, IDC_ATTAS,
+			   setupdlg->attr[KEY_ATTAS].attr,
+			   sizeof (setupdlg->attr[KEY_ATTAS].attr));
+	    strcpy(setupdlg->attr[KEY_ILIKE].attr,
+		   (IsDlgButtonChecked(hdlg, IDC_ILIKE) == BST_CHECKED) ?
 		   "1" : "0");
 	    /* FALL THROUGH */
 	case IDCANCEL:
@@ -19890,7 +20086,7 @@ retry:
 			 "ShortNames=%s;LongNames=%s;"
 			 "NoCreat=%s;NoWCHAR=%s;"
 			 "FKSupport=%s;JournalMode=%s;OEMCP=%s;LoadExt=%s;"
-			 "BigInt=%s;JDConv=%s;PWD=%s",
+			 "BigInt=%s;JDConv=%s;PWD=%s;AttachAs=%s;ILike=%s",
 			 dsn_0 ? "DSN=" : "",
 			 dsn_0 ? dsn : "",
 			 dsn_0 ? ";" : "",
@@ -19912,7 +20108,9 @@ retry:
 			 setupdlg->attr[KEY_LOADEXT].attr,
 			 setupdlg->attr[KEY_BIGINT].attr,
 			 setupdlg->attr[KEY_JDCONV].attr,
-			 setupdlg->attr[KEY_PASSWD].attr);
+			 setupdlg->attr[KEY_PASSWD].attr,
+			 setupdlg->attr[KEY_ATTAS].attr,
+			 setupdlg->attr[KEY_ILIKE].attr);
 	if (count < 0) {
 	    buf[sizeof (buf) - 1] = '\0';
 	}
@@ -19944,6 +20142,7 @@ retry:
     d->oemcp = getbool(setupdlg->attr[KEY_OEMCP].attr);
     d->dobigint = getbool(setupdlg->attr[KEY_BIGINT].attr);
     d->jdconv = getbool(setupdlg->attr[KEY_JDCONV].attr);
+    d->ilike = getbool(setupdlg->attr[KEY_ILIKE].attr);
     d->pwdLen = strlen(setupdlg->attr[KEY_PASSWD].attr);
     d->pwd = (d->pwdLen > 0) ? setupdlg->attr[KEY_PASSWD].attr : NULL;
     ret = dbopen(d, dbname ? dbname : "", 0,
@@ -19963,6 +20162,7 @@ retry:
 	   sizeof (setupdlg->attr[KEY_PASSWD].attr));
     if (ret == SQL_SUCCESS) {
 	dbloadext(d, setupdlg->attr[KEY_LOADEXT].attr);
+	dbattas(d, setupdlg->attr[KEY_ATTAS].attr);
     }
     xfree(setupdlg);
     return ret;

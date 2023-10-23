@@ -179,9 +179,10 @@ sqlite3odbc$(SEEEXT)nw.dll:	sqlite3odbcnw.o sqlite3odbcres.o $(SQLITE3_A10N_O)
 
 sqlite3.exe:		sqlite3odbc$(SEEEXT).dll sqlite3/src/minshell.c \
 			sqliteres.o
-		$(CC) $(CFLAGS) $(SQLITE3_FLAGS) -Isqlite3 -o sqlite3.exe \
+		$(CC) $(CFLAGS) -DUNICODE $(SQLITE3_FLAGS) -Isqlite3 \
+		    -municode -o sqlite3.exe \
 		    sqlite3/src/minshell.c sqliteres.o \
-		    -L. -lsqlite3odbc$(SEEEXT)
+		    -L. -lsqlite3odbc$(SEEEXT) -lcomdlg32
 		$(STRIP) sqlite3.exe
 
 sqlite3odbcres.o:	sqlite3odbc.rc resource3.h

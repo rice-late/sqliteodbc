@@ -13,7 +13,7 @@ WIN32 binaries (the ODBC driver DLL, install/uninstall programs) are in
 
     http://www.ch-werner.de/sqliteodbc/sqliteodbc.exe
 
-The binaries were made with SQLite 2.8.17, SQLite 3.32.3, MingW
+The binaries were made with SQLite 2.8.17, SQLite 3.43.2, MingW
 cross compiler and tested on Windows NT 4.0 with the query tool
 of MS Excel 97, with StarOffice 5.2 and OpenOffice 1.1 and 2.x.
 Execute the sqliteodbc.exe NSIS installer to unpack the necessary
@@ -26,7 +26,7 @@ on as an absolute pathname including the drive letter, eg as
 can be specified in the respective field. If empty a default value
 of 100000 milliseconds is used.
 
-The Win64 installer (sqliteodbc_w64.exe) was made with SQLite 3.32.3,
+The Win64 installer (sqliteodbc_w64.exe) was made with SQLite 3.43.2,
 MingW cross compiler and only rudimentary tested on Windows Vista 64.
 
 Other tests were made on Linux with the "isql" command line tool
@@ -188,7 +188,10 @@ Connect string parameters for DSN-less connects
   JDConv (boolean)	if true, use SQLite3 julian day representation for
 			SQL_TIME, SQL_TIMESTAMP, SQL_DATE types; default false
   TraceFile (string)	name of file to write SQLite traces to; default empty
-
+  AttachAs (string)	SQLite3 only: comma separated names to be the attach
+			names to the current database file; default empty
+  ILike (boolean)	SQLite3 only: if true, treat ILIKE as LIKE in SQL
+			to mimic PostgreSQL syntax; default false 
 
 Python sample usage with eGenix mx-Extension
 (see http://www.lemburg.com/files/python/mxODBC.html)
@@ -316,7 +319,7 @@ Build Instructions for Debian based systems
   ./configure && make deb
 
 
-Win32 install/remove/shell using RUNDLL32
+Win32 install/remove using RUNDLL32
 
   Each driver DLL provides entry points for ODBC driver installation
   and removal which can be invoked from RUNDLL32.EXE, eg
@@ -332,16 +335,6 @@ Win32 install/remove/shell using RUNDLL32
   thus better provide an absolute path to the DLL of interest.
   If the word "quiet" appears anywhere after the DLL/function
   name, no info message boxes pop up (but errors are shown).
-
-  An (interactive or batch) SQLite shell can be invoked, too, eg
-
-  ### run SQLite shell on database C:\bla\my.db
-  C:\> RUNDLL32 [path]sqliteodbc.dll,shell C:\bla\my.db ...
-
-  ### batch run with given SQL
-  C:\> RUNDLL32 [path]sqliteodbc.dll,shell -batch C:\bla\my.db
-       "select * from table" <NUL: 2>NUL: >out.txt
-
 
 Win64 notes
 
@@ -395,7 +388,7 @@ TODO:
 - improve documentation
 
 
-2020-06-20
+2023-10-23
 Christian Werner
 mailto:chw@ch-werner.de
 

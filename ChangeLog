@@ -1,6 +1,21 @@
 SQLite ODBC Driver
 ------------------
 
+Mon Oct 23 2023 version 0.99991 released
+
+	* update to SQLite 3.43.2
+	* fix SQL parsing, thanks Paul Wise for patch
+	* update autoconf stuff
+
+Fri Sep 01 2023 version 0.9999 released
+
+	* update to SQLite 3.43.0
+	* INSERT/UPDATE/DELETE can produce result set
+	* DSN option "ILIKE is LIKE" in SQLite3 driver
+	* DSN option "Attach As" in SQLite3 driver
+	* better deal with SQL comments
+	* cleanup in confgure.in
+
 Sat Jun 20 2020 version 0.9998 released
 
 	* update to SQLite 3.32.3
@@ -28,7 +43,7 @@ Tue Dec 01 2016 version 0.9995 released
 	* update to SQLite 3.15.2
 	* don't statically buffer result of localeconv()
 	* increased some internal string buffers
-	* fixes in SQLSetPos() 
+	* fixes in SQLSetPos()
 	* fix locking in xpath module, thanks Abramo Bagnara
 
 Sun Jun 05 2016 version 0.9994 released
@@ -615,7 +630,7 @@ Sat May 01 2004 version 0.62 released
 	* when SQLITE_UTF8 make SQLDriverConnectW() on UN*X, too
 	* added missing SQL_DESC_TYPE_NAME case in SQLColAttribute(),
 	  patch provided by Chris Waters
-	  
+
 Sat Apr 24 2004 version 0.61 released
 
 	* fixed getrowdata() to support SQLGetData() with NULL ptr and

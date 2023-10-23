@@ -2,9 +2,9 @@
  * @file sqlite4odbc.c
  * SQLite4 ODBC Driver main module.
  *
- * $Id: sqlite4odbc.c,v 1.24 2020/06/20 11:56:09 chw Exp chw $
+ * $Id: sqlite4odbc.c,v 1.26 2023/10/23 13:33:58 chw Exp chw $
  *
- * Copyright (c) 2014-2020 Christian Werner <chw@ch-werner.de>
+ * Copyright (c) 2014-2023 Christian Werner <chw@ch-werner.de>
  *
  * See the file "license.terms" for information on usage
  * and redistribution of this file and for a
@@ -112,62 +112,62 @@ static struct dl_sqlite4_funcs {
     int (*value_type)(sqlite4_value *p0);
 } dls_funcs;
 
-#define sqlite4_bind_blob             dls_funcs.bind_blob
-#define sqlite4_bind_double           dls_funcs.bind_double
-#define sqlite4_bind_int              dls_funcs.bind_int
-#define sqlite4_bind_int64            dls_funcs.bind_int64
-#define sqlite4_bind_null             dls_funcs.bind_null
+#define sqlite4_bind_blob	      dls_funcs.bind_blob
+#define sqlite4_bind_double	      dls_funcs.bind_double
+#define sqlite4_bind_int	      dls_funcs.bind_int
+#define sqlite4_bind_int64	      dls_funcs.bind_int64
+#define sqlite4_bind_null	      dls_funcs.bind_null
 #define sqlite4_bind_parameter_count  dls_funcs.bind_parameter_count
-#define sqlite4_bind_text             dls_funcs.bind_text
-#define sqlite4_changes               dls_funcs.changes
-#define sqlite4_close                 dls_funcs.close
-#define sqlite4_column_blob           dls_funcs.column_blob
-#define sqlite4_column_bytes          dls_funcs.column_bytes
-#define sqlite4_column_count          dls_funcs.column_count
+#define sqlite4_bind_text	      dls_funcs.bind_text
+#define sqlite4_changes		      dls_funcs.changes
+#define sqlite4_close		      dls_funcs.close
+#define sqlite4_column_blob	      dls_funcs.column_blob
+#define sqlite4_column_bytes	      dls_funcs.column_bytes
+#define sqlite4_column_count	      dls_funcs.column_count
 #define sqlite4_column_database_name  dls_funcs.column_database_name
 #define sqlite4_column_decltype       dls_funcs.column_decltype
-#define sqlite4_column_double         dls_funcs.column_double
-#define sqlite4_column_name           dls_funcs.column_name
+#define sqlite4_column_double	      dls_funcs.column_double
+#define sqlite4_column_name	      dls_funcs.column_name
 #define sqlite4_column_origin_name    dls_funcs.column_origin_name
 #define sqlite4_column_table_name     dls_funcs.column_table_name
-#define sqlite4_column_text           dls_funcs.column_text
-#define sqlite4_column_type           dls_funcs.column_type
+#define sqlite4_column_text	      dls_funcs.column_text
+#define sqlite4_column_type	      dls_funcs.column_type
 #define sqlite4_create_function       dls_funcs.create_function
-#define sqlite4_errcode               dls_funcs.errcode
-#define sqlite4_errmsg                dls_funcs.errmsg
-#define sqlite4_exec                  dls_funcs.exec
-#define sqlite4_finalize              dls_funcs.finalize
-#define sqlite4_free                  dls_funcs.free
-#define sqlite4_interrupt             dls_funcs.interrupt
+#define sqlite4_errcode		      dls_funcs.errcode
+#define sqlite4_errmsg		      dls_funcs.errmsg
+#define sqlite4_exec		      dls_funcs.exec
+#define sqlite4_finalize	      dls_funcs.finalize
+#define sqlite4_free		      dls_funcs.free
+#define sqlite4_interrupt	      dls_funcs.interrupt
 #if 0
 #define sqlite4_last_insert_rowid     dls_funcs.last_insert_rowid
 #endif
-#define sqlite4_libversion            dls_funcs.libversion
+#define sqlite4_libversion	      dls_funcs.libversion
 #if 0
-#define sqlite4_load_extension        dls_funcs.load_extension
+#define sqlite4_load_extension	      dls_funcs.load_extension
 #endif
-#define sqlite4_malloc                dls_funcs.malloc
-#define sqlite4_mprintf               dls_funcs.mprintf
-#define sqlite4_open                  dls_funcs.open
-#define sqlite4_prepare               dls_funcs.prepare
-#define sqlite4_profile               dls_funcs.profile
-#define sqlite4_realloc               dls_funcs.realloc
-#define sqlite4_reset                 dls_funcs.reset
-#define sqlite4_result_blob           dls_funcs.result_blob
-#define sqlite4_result_error          dls_funcs.result_error
-#define sqlite4_result_int            dls_funcs.result_int
-#define sqlite4_result_null           dls_funcs.result_null
-#define sqlite4_step                  dls_funcs.step
-#define sqlite4_strnicmp              dls_funcs.xstrnicmp
+#define sqlite4_malloc		      dls_funcs.malloc
+#define sqlite4_mprintf		      dls_funcs.mprintf
+#define sqlite4_open		      dls_funcs.open
+#define sqlite4_prepare		      dls_funcs.prepare
+#define sqlite4_profile		      dls_funcs.profile
+#define sqlite4_realloc		      dls_funcs.realloc
+#define sqlite4_reset		      dls_funcs.reset
+#define sqlite4_result_blob	      dls_funcs.result_blob
+#define sqlite4_result_error	      dls_funcs.result_error
+#define sqlite4_result_int	      dls_funcs.result_int
+#define sqlite4_result_null	      dls_funcs.result_null
+#define sqlite4_step		      dls_funcs.step
+#define sqlite4_strnicmp	      dls_funcs.xstrnicmp
 #if 0
 #define sqlite4_table_column_metadata dls_funcs.table_column_metadata
 #endif
-#define sqlite4_trace                 dls_funcs.trace
-#define sqlite4_user_data             dls_funcs.user_data
-#define sqlite4_value_blob            dls_funcs.value_blob
-#define sqlite4_value_bytes           dls_funcs.value_bytes
-#define sqlite4_value_text            dls_funcs.value_text
-#define sqlite4_value_type            dls_funcs.value_type
+#define sqlite4_trace		      dls_funcs.trace
+#define sqlite4_user_data	      dls_funcs.user_data
+#define sqlite4_value_blob	      dls_funcs.value_blob
+#define sqlite4_value_bytes	      dls_funcs.value_bytes
+#define sqlite4_value_text	      dls_funcs.value_text
+#define sqlite4_value_type	      dls_funcs.value_type
 
 #endif
 
@@ -622,7 +622,7 @@ dsappend(dstr *dsp, const char *str)
 	if (max < len) {
 	    max += len;
 	}
-	dsp = xmalloc(max);
+	dsp = xmalloc(max + sizeof (*dsp));
 	if (dsp) {
 	    dsp->max = max;
 	    dsp->len = dsp->oom = 0;
@@ -635,7 +635,7 @@ dsappend(dstr *dsp, const char *str)
     }
     if (dsp->len + len > dsp->max) {
 	int max = dsp->max + len + 256;
-	dstr *ndsp = xrealloc(dsp, max);
+	dstr *ndsp = xrealloc(dsp, max + sizeof (*dsp));
 
 	if (!ndsp) {
 	    strcpy(dsp->buffer, "OUT OF MEMORY");
@@ -682,7 +682,7 @@ dsappendq(dstr *dsp, const char *str)
 	if (max < len) {
 	    max += len;
 	}
-	dsp = xmalloc(max);
+	dsp = xmalloc(max + sizeof (*dsp));
 	if (dsp) {
 	    dsp->max = max;
 	    dsp->len = dsp->oom = 0;
@@ -695,7 +695,7 @@ dsappendq(dstr *dsp, const char *str)
     }
     if (dsp->len + len > dsp->max) {
 	int max = dsp->max + len + 256;
-	dstr *ndsp = xrealloc(dsp, max);
+	dstr *ndsp = xrealloc(dsp, max + sizeof (*dsp));
 
 	if (!ndsp) {
 	    strcpy(dsp->buffer, "OUT OF MEMORY");
@@ -1374,6 +1374,9 @@ drvgettable_row(TBLRES *t, int ncol, int rc)
 	char **resnew;
 	int nalloc = t->nalloc * 2 + need + 1;
 
+	if (nallc < t->nalloc) {
+	    goto nomem;
+	}
 	resnew = xrealloc(t->resarr, sizeof (char *) * nalloc);
 	if (!resnew) {
 nomem:
@@ -2287,8 +2290,8 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
     case SQL_INTEGER:       m = 10; d = 9; break;
     case SQL_TINYINT:       m = 4; d = 3; break;
     case SQL_SMALLINT:      m = 6; d = 5; break;
-    case SQL_FLOAT:         m = 25; d = 24; break;
-    case SQL_DOUBLE:        m = 54; d = 53; break;
+    case SQL_FLOAT:	    m = 25; d = 24; break;
+    case SQL_DOUBLE:	    m = 54; d = 53; break;
     case SQL_VARCHAR:       m = 255; d = 0; break;
 #ifdef WINTERFACE
 #ifdef SQL_WVARCHAR
@@ -2298,11 +2301,11 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
 #ifdef SQL_TYPE_DATE
     case SQL_TYPE_DATE:
 #endif
-    case SQL_DATE:          m = 10; d = 0; break;
+    case SQL_DATE:	    m = 10; d = 0; break;
 #ifdef SQL_TYPE_TIME
     case SQL_TYPE_TIME:
 #endif
-    case SQL_TIME:          m = 8; d = 0; break;
+    case SQL_TIME:	    m = 8; d = 0; break;
 #ifdef SQL_TYPE_TIMESTAMP
     case SQL_TYPE_TIMESTAMP:
 #endif
@@ -2319,7 +2322,7 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
     case SQL_VARBINARY:     m = 255; d = 0; break;
     case SQL_LONGVARBINARY: m = 65536; d = 0; break;
 #ifdef SQL_BIGINT
-    case SQL_BIGINT:        m = 20; d = 19; break;
+    case SQL_BIGINT:	    m = 20; d = 19; break;
 #endif
 #ifdef SQL_BIT
     case SQL_BIT:	    m = 1; d = 1; break;
@@ -2552,6 +2555,18 @@ errout:
 		}
 	    }
 	    *p++ = *q;
+	    break;
+	case '-':
+	    *p++ = *q;
+	    if (!inq && q[1] == '-') {
+		++q;
+		while (*q) {
+		    *p++ = *q++;
+		    if (*q == '\n') {
+			break;
+		    }
+		}
+	    }
 	    break;
 	case '?':
 	    *p++ = *q;
@@ -4698,11 +4713,7 @@ setupparam(STMT *s, char *sql, int pnum)
     switch (type) {
     case SQL_C_BINARY:
 	p->s4type = SQLITE4_BLOB;
-	p->s4size = p->len;
 	p->s4val = p->param;
-	if (p->need < 0) {
-	    break;
-	}
 	if (!p->lenp) {
 	    len = p->len;
 	} else if (*p->lenp == SQL_DATA_AT_EXEC) {
@@ -4719,7 +4730,6 @@ setupparam(STMT *s, char *sql, int pnum)
 	}
 	p->len = len;
 	p->max = p->len;
-	p->need = -1;
 	p->s4size = len;
 	break;
 #ifdef WCHARSUPPORT
@@ -10785,7 +10795,7 @@ drvgetinfo(SQLHDBC dbc, SQLUSMALLINT type, SQLPOINTER val, SQLSMALLINT valMax,
 	*valLen = sizeof (SQLUINTEGER);
 	break;
     case SQL_CORRELATION_NAME:
-	*((SQLSMALLINT *) val) = SQL_CN_DIFFERENT;
+	*((SQLSMALLINT *) val) = SQL_CN_ANY;
 	*valLen = sizeof (SQLSMALLINT);
 	break;
     case SQL_NON_NULLABLE_COLUMNS:
@@ -18320,11 +18330,11 @@ done:
 #include <windowsx.h>
 #include <winuser.h>
 
-#define MAXPATHLEN      (259+1)           /* Max path length */
-#define MAXKEYLEN       (15+1)            /* Max keyword length */
-#define MAXDESC         (255+1)           /* Max description length */
-#define MAXDSNAME       (255+1)           /* Max data source name length */
-#define MAXTONAME       (32+1)            /* Max timeout length */
+#define MAXPATHLEN      (259+1)	   /* Max path length */
+#define MAXKEYLEN       (15+1)	   /* Max keyword length */
+#define MAXDESC		(255+1)	   /* Max description length */
+#define MAXDSNAME       (255+1)	   /* Max data source name length */
+#define MAXTONAME       (32+1)	   /* Max timeout length */
 #define MAXDBNAME       MAXPATHLEN
 
 /* Attribute key indexes into an array of Attr structs, see below */
@@ -18342,11 +18352,11 @@ done:
 #define KEY_NOCREAT	       10
 #define KEY_NOWCHAR	       11
 #define KEY_LOADEXT	       12
-#define KEY_JMODE              13
-#define KEY_FKSUPPORT          14
-#define KEY_OEMCP              15
-#define KEY_BIGINT             16
-#define KEY_PASSWD             17
+#define KEY_JMODE	       13
+#define KEY_FKSUPPORT	       14
+#define KEY_OEMCP	       15
+#define KEY_BIGINT	       16
+#define KEY_PASSWD	       17
 #define NUMOFKEYS	       18
 
 typedef struct {

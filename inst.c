@@ -2,9 +2,9 @@
  * @file inst.c
  * SQLite ODBC Driver installer/uninstaller for WIN32
  *
- * $Id: inst.c,v 1.26 2016/08/14 10:02:55 chw Exp chw $
+ * $Id: inst.c,v 1.27 2023/08/23 08:43:02 chw Exp chw $
  *
- * Copyright (c) 2001-2016 Christian Werner <chw@ch-werner.de>
+ * Copyright (c) 2001-2023 Christian Werner <chw at ch minus werner dot de>
  *
  * See the file "license.terms" for information on usage
  * and redistribution of this file and for a
@@ -48,7 +48,7 @@ static char *DriverDLL[NUMDRVS] = {
     "sqlite3odbc" SEEEXT ".dll",
     "sqlite4odbc.dll"
 };
-#ifdef WITH_SQLITE_DLLS
+#if defined(WITH_SQLITE_DLLS) && (WITH_SQLITE_DLLS <= 1)
 static char *EngineDLL[NUMDRVS] = {
     "sqlite.dll",
     "sqliteu.dll",
@@ -321,7 +321,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     quiet = strstr(p, "instq") != NULL;
     nosys = strstr(p, "nosys") != NULL;
     for (i = 0; i < NUMDRVS; i++) {
-#ifdef WITH_SQLITE_DLLS
+#if defined(WITH_SQLITE_DLLS) && (WITH_SQLITE_DLLS <= 1)
 	p = EngineDLL[i];
 #else
 	p = NULL;

@@ -631,9 +631,9 @@ main(int argc, char **argv)
    }
    if (lib) {
       gpps = (int (*)()) dlsym(lib, "SQLGetPrivateProfileString");
-      exit(0);
+      return 0;
    }
-   exit(1);
+   return 1;
 }
 ],[
    ODBC_FLAGS="$ODBC_FLAGS -DUSE_DLOPEN_FOR_GPPS"
@@ -675,7 +675,7 @@ vatest(char **x, ...)
 int
 main(int argc, char **argv)
 {
-   exit(vatest(NULL, vatest, 0.0, 0, NULL));
+   return(vatest(NULL, vatest, 0.0, 0, NULL));
 }
 ],[USE_VFUNCS=1],[USE_VFUNCS=0],[USE_VFUNCS=0])
 
