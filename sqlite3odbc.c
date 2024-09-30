@@ -2308,9 +2308,10 @@ getmd(const char *typename, int sqltype, int *mp, int *dp)
     case SQL_INTEGER:       m = 10; d = 9; break;
     case SQL_TINYINT:       m = 4; d = 3; break;
     case SQL_SMALLINT:      m = 6; d = 5; break;
-    case SQL_FLOAT:	    m = 25; d = 24; break;
-    case SQL_DOUBLE:	    m = 54; d = 53; break;
-    case SQL_VARCHAR:       m = 255; d = 0; break;
+    case SQL_FLOAT:         m = 25; d = 24; break;
+    case SQL_DOUBLE:        m = 54; d = 53; break;
+    //case SQL_VARCHAR:       m = 255; d = 0; break;	
+    case SQL_VARCHAR:       m = 4095; d = 0; break;
 #ifdef WINTERFACE
 #ifdef SQL_WVARCHAR
     case SQL_WVARCHAR:      m = 255; d = 0; break;
@@ -2894,7 +2895,8 @@ fixupdyncols(STMT *s, DBC *d)
 	      &s->dyncols[i].size, &s->dyncols[i].prec);
 #ifdef SQL_LONGVARCHAR
 	if (s->dyncols[i].type == SQL_VARCHAR &&
-	    s->dyncols[i].size > 255) {
+	    //s->dyncols[i].size > 255) {
+		s->dyncols[i].size > 4095) {
 	    s->dyncols[i].type = SQL_LONGVARCHAR;
 	}
 #endif
@@ -2981,7 +2983,8 @@ fixupdyncols(STMT *s, DBC *d)
 			  &s->dyncols[m].prec);
 #ifdef SQL_LONGVARCHAR
 		    if (s->dyncols[m].type == SQL_VARCHAR &&
-			s->dyncols[m].size > 255) {
+			//s->dyncols[m].size > 255) {
+			s->dyncols[m].size > 4095) {
 			s->dyncols[m].type = SQL_LONGVARCHAR;
 		    }
 #endif
@@ -7277,7 +7280,8 @@ nodata_but_rowid:
 							 s->dobigint);
 				    getmd(typen, sqltype, &mm, &dd);
 #ifdef SQL_LONGVARCHAR
-				    if (sqltype == SQL_VARCHAR && mm > 255) {
+				    //if (sqltype == SQL_VARCHAR && mm > 255) {
+					if (sqltype == SQL_VARCHAR && mm > 4095) {
 					sqltype = SQL_LONGVARCHAR;
 				    }
 #endif
@@ -15478,7 +15482,8 @@ drvcolumns(SQLHSTMT stmt,
 					     s->nowchar[0], s->dobigint);
 			getmd(typename, sqltype, &mm, &dd);
 #ifdef SQL_LONGVARCHAR
-			if (sqltype == SQL_VARCHAR && mm > 255) {
+			//if (sqltype == SQL_VARCHAR && mm > 255) {
+			if (sqltype == SQL_VARCHAR && mm > 4095) {
 			    sqltype = SQL_LONGVARCHAR;
 			}
 #endif
